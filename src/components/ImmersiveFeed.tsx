@@ -1,0 +1,197 @@
+import { useState, useRef, useCallback, useEffect } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
+import { ArrowLeft, ChevronUp } from "lucide-react";
+import { Theme, Product } from "@/data/shopData";
+import FloatingProductCard from "./FloatingProductCard";
+import QuickShopSheet from "./QuickShopSheet";
+
+interface ImmersiveFeedProps {
+  theme: Theme;
+  onBack: () => void;
+}
+
+const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef(0);
+  const touchDeltaY = useRef(0);
+
+  const looks = theme.looks;
+  const currentLook = looks[currentIndex];
+
+  const handleSwipe = useCallback(
+    (direction: "up" | "down") => {
+      if (isTransitioning) return;
+      if (direction === "up" && currentIndex < looks.length - 1) {
+        setIsTransitioning(true);
+        setCurrentIndex((i) => i + 1);
+        setShowSwipeHint(false);
+        setTimeout(() => setIsTransitioning(false), 500);
+      } else if (direction === "down" && currentIndex > 0) {
+        setIsTransitioning(true);
+        setCurrentIndex((i) => i - 1);
+        setTimeout(() => setIsTransitioning(false), 500);
+      }
+    },
+    [currentIndex, looks.length, isTransitioning]
+  );
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchDeltaY.current = touchStartY.current - e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    if (Math.abs(touchDeltaY.current) > 50) {
+      handleSwipe(touchDeltaY.current > 0 ? "up" : "down");
+    }
+    touchDeltaY.current = 0;
+  };
+
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > 30) {
+        handleSwipe(e.deltaY > 0 ? "up" : "down");
+      }
+    },
+    [handleSwipe]
+  );
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.addEventListener("wheel", handleWheel, { passive: true });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, [handleWheel]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 bg-black overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Back button */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        onClick={onBack}
+        className="absolute top-12 left-4 z-40 glass rounded-full p-2"
+      >
+        <ArrowLeft className="w-5 h-5 text-primary-foreground" />
+      </motion.button>
+
+      {/* Progress dots */}
+      <div className="absolute top-12 right-4 z-40 flex flex-col gap-1.5">
+        {looks.map((_, i) => (
+          <div
+            key={i}
+            className={`w-1.5 rounded-full transition-all duration-300 ${
+              i === currentIndex
+                ? "h-5 bg-primary-foreground"
+                : "h-1.5 bg-primary-foreground/40"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Look slides */}
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          key={currentLook.id}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+          className="absolute inset-0"
+        >
+          {/* Background image with slow zoom */}
+          <motion.img
+            src={currentLook.image}
+            alt={currentLook.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 8, ease: "linear" }}
+          />
+
+          {/* Gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+
+          {/* Title block */}
+          <div className="absolute top-24 left-5 right-16 z-10">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="font-display text-3xl font-semibold text-primary-foreground text-shadow"
+            >
+              {currentLook.title}
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="text-primary-foreground/70 font-body text-sm mt-1 text-shadow"
+            >
+              {currentLook.subtitle}
+            </motion.p>
+          </div>
+
+          {/* Floating product cards */}
+          <div className="absolute bottom-28 right-4 left-4 z-10 flex flex-col items-end gap-2">
+            {currentLook.products.map((product, idx) => (
+              <FloatingProductCard
+                key={product.id}
+                product={product}
+                index={idx}
+                onTap={setSelectedProduct}
+              />
+            ))}
+          </div>
+
+          {/* Swipe hint */}
+          {showSwipeHint && currentIndex === 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 1 }}
+              className="absolute bottom-10 left-0 right-0 flex flex-col items-center z-10"
+            >
+              <motion.div
+                animate={{ y: [-4, 4, -4] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                <ChevronUp className="w-5 h-5 text-primary-foreground/60" />
+              </motion.div>
+              <span className="text-primary-foreground/50 text-xs font-body mt-0.5">
+                Swipe up for next look
+              </span>
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Quick shop */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <QuickShopSheet
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default ImmersiveFeed;
