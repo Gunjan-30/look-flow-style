@@ -1,16 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import ThemeSelector from "@/components/ThemeSelector";
+import ImmersiveFeed from "@/components/ImmersiveFeed";
+import { Theme } from "@/data/shopData";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="max-w-md mx-auto relative bg-background min-h-[100dvh] overflow-hidden">
+      <AnimatePresence mode="wait">
+        {!selectedTheme ? (
+          <motion.div
+            key="selector"
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ThemeSelector onSelectTheme={setSelectedTheme} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="feed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ImmersiveFeed
+              theme={selectedTheme}
+              onBack={() => setSelectedTheme(null)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
