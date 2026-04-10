@@ -122,8 +122,9 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
             transition={{ duration: 8, ease: "linear" }}
           />
 
-          {/* Gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+          {/* Gradient overlays - stronger bottom fade for CTA readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30" />
+          <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/70 to-transparent" />
 
           {/* Title block */}
           <div className="absolute top-24 left-5 right-16 z-10">
@@ -131,7 +132,7 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="font-display text-3xl font-semibold text-primary-foreground text-shadow"
+              className="font-display text-3xl font-semibold text-white text-shadow"
             >
               {currentLook.title}
             </motion.h2>
@@ -139,20 +140,20 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35 }}
-              className="text-primary-foreground/70 font-body text-sm mt-1 text-shadow"
+              className="text-white/70 font-body text-sm mt-1 text-shadow"
             >
               {currentLook.subtitle}
             </motion.p>
           </div>
 
           {/* Bottom section */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-5 pb-10 flex flex-col items-center gap-3">
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-5 pb-8 flex flex-col items-center gap-3" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
             {/* Product name microcopy */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="text-primary-foreground/50 text-xs font-body tracking-wide text-shadow"
+              className="text-white/60 text-xs font-body tracking-widest uppercase text-shadow"
             >
               {currentLook.product.name}
             </motion.p>
@@ -170,9 +171,9 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
                   animate={{ y: [-3, 3, -3] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                 >
-                  <ChevronUp className="w-4 h-4 text-primary-foreground/40" />
+                  <ChevronUp className="w-4 h-4 text-white/40" />
                 </motion.div>
-                <span className="text-primary-foreground/30 text-xs font-body">
+                <span className="text-white/35 text-xs font-body">
                   Swipe up for more
                 </span>
               </motion.div>
@@ -185,7 +186,8 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
               transition={{ duration: 0.4, delay: 0.8 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowDetails(true)}
-              className="w-full max-w-sm py-4 rounded-full bg-primary-foreground/95 text-background font-body font-medium text-sm tracking-wide shadow-lg shadow-black/30"
+              className="w-full max-w-sm py-4 px-6 rounded-full font-body font-semibold text-[15px] tracking-wide shadow-xl shadow-black/40"
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)', color: '#FFFFFF', backdropFilter: 'blur(8px)' }}
             >
               View Product Details – {currentLook.product.price}
             </motion.button>
