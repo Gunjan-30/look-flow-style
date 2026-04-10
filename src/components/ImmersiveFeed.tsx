@@ -1,8 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ChevronUp } from "lucide-react";
 import { Theme, Product } from "@/data/shopData";
-import FloatingProductCard from "./FloatingProductCard";
 import QuickShopSheet from "./QuickShopSheet";
 
 interface ImmersiveFeedProps {
@@ -12,7 +11,7 @@ interface ImmersiveFeedProps {
 
 const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -124,7 +123,7 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
           />
 
           {/* Gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
 
           {/* Title block */}
           <div className="absolute top-24 left-5 right-16 z-10">
@@ -146,47 +145,75 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
             </motion.p>
           </div>
 
-          {/* Floating product cards */}
-          <div className="absolute bottom-28 right-4 left-4 z-10 flex flex-col items-end gap-2">
-            {currentLook.products.map((product, idx) => (
-              <FloatingProductCard
-                key={product.id}
-                product={product}
-                index={idx}
-                onTap={setSelectedProduct}
-              />
-            ))}
-          </div>
-
-          {/* Swipe hint */}
-          {showSwipeHint && currentIndex === 0 && (
+          {/* Bottom section: Product card + Swipe hint + CTA */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-5 pb-10 flex flex-col items-center gap-3">
+            {/* Product info card */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 1 }}
-              className="absolute bottom-10 left-0 right-0 flex flex-col items-center z-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="glass rounded-2xl p-3 flex items-center gap-3 w-full max-w-sm"
             >
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                <ChevronUp className="w-5 h-5 text-primary-foreground/60" />
-              </motion.div>
-              <span className="text-primary-foreground/50 text-xs font-body mt-0.5">
-                Swipe up for next look
-              </span>
+              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                <img
+                  src={currentLook.product.image}
+                  alt={currentLook.product.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-body text-primary-foreground truncate text-shadow">
+                  {currentLook.product.name}
+                </p>
+                <p className="text-sm font-body font-semibold text-primary-foreground/90 text-shadow">
+                  {currentLook.product.price}
+                </p>
+              </div>
             </motion.div>
-          )}
+
+            {/* Swipe hint */}
+            {showSwipeHint && currentIndex === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 1.2 }}
+                className="flex items-center gap-1"
+              >
+                <motion.div
+                  animate={{ y: [-3, 3, -3] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ChevronUp className="w-4 h-4 text-primary-foreground/50" />
+                </motion.div>
+                <span className="text-primary-foreground/40 text-xs font-body">
+                  Swipe up for more
+                </span>
+              </motion.div>
+            )}
+
+            {/* CTA Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.7 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowDetails(true)}
+              className="w-full max-w-sm py-4 rounded-2xl bg-primary-foreground text-background font-body font-medium text-sm tracking-wide"
+            >
+              View Product Details
+            </motion.button>
+          </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Quick shop */}
+      {/* Product detail sheet */}
       <AnimatePresence>
-        {selectedProduct && (
+        {showDetails && (
           <QuickShopSheet
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
+            product={currentLook.product}
+            onClose={() => setShowDetails(false)}
           />
         )}
       </AnimatePresence>

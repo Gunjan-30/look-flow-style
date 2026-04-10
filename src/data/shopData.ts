@@ -21,7 +21,7 @@ export interface Look {
   title: string;
   subtitle: string;
   image: string;
-  products: Product[];
+  product: Product;
 }
 
 export interface Theme {
@@ -44,44 +44,52 @@ export const themes: Theme[] = [
         title: "Pastel Dreams",
         subtitle: "Soft, romantic, celebration-ready",
         image: lookPastel,
-        products: [
-          { id: "p1", name: "Lavender Midi Dress", price: "₹4,299", image: lookPastel, sizes: ["XS", "S", "M", "L"] },
-          { id: "p2", name: "Pearl Necklace Set", price: "₹1,899", image: lookPastel, sizes: ["One Size"] },
-          { id: "p3", name: "Nude Block Heels", price: "₹2,599", image: lookPastel, sizes: ["36", "37", "38", "39", "40"] },
-        ],
+        product: {
+          id: "p1",
+          name: "Lavender Tutu Dress",
+          price: "₹2,299",
+          image: lookPastel,
+          sizes: ["0-6M", "6-12M", "1-2Y", "2-3Y"],
+        },
       },
       {
         id: "festive-bright",
         title: "Festive Glow",
         subtitle: "Bold, bright, unapologetically fun",
         image: lookFestive,
-        products: [
-          { id: "p4", name: "Sequin Party Dress", price: "₹5,999", image: lookFestive, sizes: ["XS", "S", "M", "L"] },
-          { id: "p5", name: "Statement Earrings", price: "₹999", image: lookFestive, sizes: ["One Size"] },
-          { id: "p6", name: "Faux Fur Stole", price: "₹2,199", image: lookFestive, sizes: ["One Size"] },
-        ],
+        product: {
+          id: "p4",
+          name: "Sequin Party Romper",
+          price: "₹1,999",
+          image: lookFestive,
+          sizes: ["0-6M", "6-12M", "1-2Y", "2-3Y"],
+        },
       },
       {
         id: "evening-dressy",
         title: "Evening Elegance",
         subtitle: "Timeless, refined, unforgettable",
         image: lookEvening,
-        products: [
-          { id: "p7", name: "Black Velvet Gown", price: "₹7,499", image: lookEvening, sizes: ["XS", "S", "M", "L", "XL"] },
-          { id: "p8", name: "Crystal Drop Earrings", price: "₹1,499", image: lookEvening, sizes: ["One Size"] },
-          { id: "p9", name: "Glitter Stilettos", price: "₹3,299", image: lookEvening, sizes: ["36", "37", "38", "39"] },
-        ],
+        product: {
+          id: "p7",
+          name: "Velvet Bow Dress",
+          price: "₹2,799",
+          image: lookEvening,
+          sizes: ["0-6M", "6-12M", "1-2Y", "2-3Y", "3-4Y"],
+        },
       },
       {
         id: "coord-party",
         title: "Sunset Co-ord",
         subtitle: "Comfortable, playful, celebration-friendly",
         image: lookCoord,
-        products: [
-          { id: "p10", name: "Red Co-ord Set", price: "₹3,799", image: lookCoord, sizes: ["XS", "S", "M", "L"] },
-          { id: "p11", name: "Gold Hoop Earrings", price: "₹799", image: lookCoord, sizes: ["One Size"] },
-          { id: "p12", name: "Strappy Sandals", price: "₹1,999", image: lookCoord, sizes: ["36", "37", "38", "39", "40"] },
-        ],
+        product: {
+          id: "p10",
+          name: "Cotton Co-ord Set",
+          price: "₹1,599",
+          image: lookCoord,
+          sizes: ["0-6M", "6-12M", "1-2Y", "2-3Y"],
+        },
       },
     ],
   },
