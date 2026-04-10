@@ -145,32 +145,17 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
             </motion.p>
           </div>
 
-          {/* Bottom section: Product card + Swipe hint + CTA */}
+          {/* Bottom section */}
           <div className="absolute bottom-0 left-0 right-0 z-10 px-5 pb-10 flex flex-col items-center gap-3">
-            {/* Product info card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            {/* Product name microcopy */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="glass rounded-2xl p-3 flex items-center gap-3 w-full max-w-sm"
+              className="text-primary-foreground/50 text-xs font-body tracking-wide text-shadow"
             >
-              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
-                <img
-                  src={currentLook.product.image}
-                  alt={currentLook.product.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-body text-primary-foreground truncate text-shadow">
-                  {currentLook.product.name}
-                </p>
-                <p className="text-sm font-body font-semibold text-primary-foreground/90 text-shadow">
-                  {currentLook.product.price}
-                </p>
-              </div>
-            </motion.div>
+              {currentLook.product.name}
+            </motion.p>
 
             {/* Swipe hint */}
             {showSwipeHint && currentIndex === 0 && (
@@ -185,9 +170,9 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
                   animate={{ y: [-3, 3, -3] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                 >
-                  <ChevronUp className="w-4 h-4 text-primary-foreground/50" />
+                  <ChevronUp className="w-4 h-4 text-primary-foreground/40" />
                 </motion.div>
-                <span className="text-primary-foreground/40 text-xs font-body">
+                <span className="text-primary-foreground/30 text-xs font-body">
                   Swipe up for more
                 </span>
               </motion.div>
@@ -197,12 +182,12 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
             <motion.button
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.7 }}
+              transition={{ duration: 0.4, delay: 0.8 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowDetails(true)}
-              className="w-full max-w-sm py-4 rounded-2xl bg-primary-foreground text-background font-body font-medium text-sm tracking-wide"
+              className="w-full max-w-sm py-4 rounded-full bg-primary-foreground/95 text-background font-body font-medium text-sm tracking-wide shadow-lg shadow-black/30"
             >
-              View Product Details
+              View Product Details – {currentLook.product.price}
             </motion.button>
           </div>
         </motion.div>
