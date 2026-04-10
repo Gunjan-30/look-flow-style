@@ -122,9 +122,9 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
             transition={{ duration: 8, ease: "linear" }}
           />
 
-          {/* Gradient overlays - stronger bottom fade for CTA readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30" />
-          <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/70 to-transparent" />
+          {/* Gradient overlays - softer fade for readability without competing with CTA */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25" />
+          <div className="absolute bottom-0 left-0 right-0 h-[28%] bg-gradient-to-t from-black/50 to-transparent" />
 
           {/* Title block */}
           <div className="absolute top-24 left-5 right-16 z-10">
@@ -147,7 +147,7 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
           </div>
 
           {/* Bottom section */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 px-5 pb-8 flex flex-col items-center gap-3" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-5 flex flex-col items-center gap-3" style={{ paddingBottom: 'max(2.5rem, env(safe-area-inset-bottom))' }}>
             {/* Product name microcopy */}
             <motion.p
               initial={{ opacity: 0 }}
@@ -186,8 +186,15 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
               transition={{ duration: 0.4, delay: 0.8 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowDetails(true)}
-              className="w-full max-w-sm py-4 px-6 rounded-full font-body font-semibold text-[15px] tracking-wide shadow-xl shadow-black/40"
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)', color: '#FFFFFF', backdropFilter: 'blur(8px)' }}
+              className="w-full max-w-sm py-4 px-6 rounded-full font-body font-semibold text-[15px] tracking-wide"
+              style={{
+                backgroundColor: 'rgba(45, 30, 60, 0.88)',
+                color: '#FFFFFF',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2)',
+              }}
             >
               View Product Details – {currentLook.product.price}
             </motion.button>
