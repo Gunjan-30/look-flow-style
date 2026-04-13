@@ -12,7 +12,7 @@ interface ImmersiveFeedProps {
 const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
-  const [showSwipeHint, setShowSwipeHint] = useState(true);
+  const [hasEverSwiped, setHasEverSwiped] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
