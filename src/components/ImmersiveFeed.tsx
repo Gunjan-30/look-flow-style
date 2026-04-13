@@ -155,10 +155,10 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: 1.8, duration: 0.7, ease: "easeOut" }}
-                className="flex flex-col items-center gap-1"
               >
                 <motion.div
-                  animate={{ y: [0, -8, 0] }}
+                  className="flex flex-col items-center gap-1"
+                  animate={{ y: [0, -8, 0], opacity: [0.8, 1, 0.8] }}
                   transition={{
                     repeat: Infinity,
                     duration: 1.4,
@@ -167,10 +167,10 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
                   }}
                 >
                   <ChevronUp className="w-6 h-6 text-white/70" strokeWidth={2.5} />
+                  <span className="text-white/60 text-sm font-body tracking-wide">
+                    Swipe up to discover more
+                  </span>
                 </motion.div>
-                <span className="text-white/60 text-sm font-body tracking-wide">
-                  Swipe up to discover more
-                </span>
               </motion.div>
             )}
 
