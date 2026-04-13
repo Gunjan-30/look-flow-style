@@ -27,7 +27,7 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
       if (direction === "up" && currentIndex < looks.length - 1) {
         setIsTransitioning(true);
         setCurrentIndex((i) => i + 1);
-        setShowSwipeHint(false);
+        setHasEverSwiped(true);
         setTimeout(() => setIsTransitioning(false), 500);
       } else if (direction === "down" && currentIndex > 0) {
         setIsTransitioning(true);
@@ -148,29 +148,28 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
 
           {/* Bottom section */}
           <div className="absolute bottom-0 left-0 right-0 z-10 px-5 flex flex-col items-center gap-3" style={{ paddingBottom: 'max(2.5rem, env(safe-area-inset-bottom))' }}>
-            {/* Swipe hint — progressive onboarding */}
-            {currentIndex <= 1 && (
+            {/* Swipe hint — delayed, progressive */}
+            {!hasEverSwiped && currentIndex === 0 && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: currentIndex === 0 ? 1 : 0.5 }}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: currentIndex === 0 ? 0.8 : 0.4, duration: 0.6 }}
+                transition={{ delay: 1.8, duration: 0.7, ease: "easeOut" }}
                 className="flex flex-col items-center gap-1"
               >
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
                   transition={{
-                    repeat: currentIndex === 0 ? Infinity : 3,
+                    repeat: Infinity,
                     duration: 1.4,
                     ease: "easeInOut",
+                    delay: 2.5,
                   }}
                 >
                   <ChevronUp className="w-6 h-6 text-white/70" strokeWidth={2.5} />
                 </motion.div>
                 <span className="text-white/60 text-sm font-body tracking-wide">
-                  {currentIndex === 0
-                    ? "Swipe up to discover more"
-                    : "Swipe up for more"}
+                  Swipe up to discover more
                 </span>
               </motion.div>
             )}
