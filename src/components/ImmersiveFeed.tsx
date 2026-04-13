@@ -148,36 +148,42 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
 
           {/* Bottom section */}
           <div className="absolute bottom-0 left-0 right-0 z-10 px-5 flex flex-col items-center gap-3" style={{ paddingBottom: 'max(2.5rem, env(safe-area-inset-bottom))' }}>
+            {/* Swipe hint — progressive onboarding */}
+            {currentIndex <= 1 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: currentIndex === 0 ? 1 : 0.5 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: currentIndex === 0 ? 0.8 : 0.4, duration: 0.6 }}
+                className="flex flex-col items-center gap-1"
+              >
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    repeat: currentIndex === 0 ? Infinity : 3,
+                    duration: 1.4,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <ChevronUp className="w-6 h-6 text-white/70" strokeWidth={2.5} />
+                </motion.div>
+                <span className="text-white/60 text-sm font-body tracking-wide">
+                  {currentIndex === 0
+                    ? "Swipe up to discover more"
+                    : "Swipe up for more"}
+                </span>
+              </motion.div>
+            )}
+
             {/* Product name microcopy */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="text-white/60 text-xs font-body tracking-widest uppercase text-shadow"
+              className="text-white/50 text-xs font-body tracking-widest uppercase text-shadow"
             >
               {currentLook.product.name}
             </motion.p>
-
-            {/* Swipe hint */}
-            {showSwipeHint && currentIndex === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 1.2 }}
-                className="flex items-center gap-1"
-              >
-                <motion.div
-                  animate={{ y: [-3, 3, -3] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                >
-                  <ChevronUp className="w-4 h-4 text-white/40" />
-                </motion.div>
-                <span className="text-white/35 text-xs font-body">
-                  Swipe up for more
-                </span>
-              </motion.div>
-            )}
 
             {/* CTA Button */}
             <motion.button
