@@ -150,7 +150,7 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
       {/* Look slides */}
       <AnimatePresence mode="popLayout">
         <motion.div
-          key={currentLook.id}
+          key={`${currentLook.id}-${gender}`}
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
