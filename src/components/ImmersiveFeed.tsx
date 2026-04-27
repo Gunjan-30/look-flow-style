@@ -95,8 +95,46 @@ const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
         <ArrowLeft className="w-5 h-5 text-primary-foreground" />
       </motion.button>
 
+      {/* Gender toggle (top-right) */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+        className="absolute top-12 right-4 z-40 flex items-center gap-1 rounded-full p-1"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.35)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.15)",
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.25)",
+        }}
+        role="group"
+        aria-label="Filter by gender"
+      >
+        {(["girl", "boy"] as const).map((option) => {
+          const isActive = gender === "both" || gender === option;
+          const isSolo = gender === option;
+          return (
+            <motion.button
+              key={option}
+              onClick={() => handleGenderTap(option)}
+              whileTap={{ scale: 0.92 }}
+              aria-pressed={isSolo}
+              aria-label={option === "girl" ? "Show girl products" : "Show boy products"}
+              className="relative flex items-center justify-center w-8 h-8 rounded-full text-base transition-all duration-300"
+              style={{
+                backgroundColor: isSolo ? "rgba(255, 255, 255, 0.18)" : "transparent",
+                opacity: isActive ? 1 : 0.5,
+              }}
+            >
+              <span aria-hidden>{option === "girl" ? "👧" : "👦"}</span>
+            </motion.button>
+          );
+        })}
+      </motion.div>
+
       {/* Progress dots */}
-      <div className="absolute top-12 right-4 z-40 flex flex-col gap-1.5">
+      <div className="absolute top-24 right-4 z-40 flex flex-col gap-1.5">
         {looks.map((_, i) => (
           <div
             key={i}
