@@ -9,11 +9,18 @@ interface ImmersiveFeedProps {
   onBack: () => void;
 }
 
+type GenderFilter = "both" | "girl" | "boy";
+
 const ImmersiveFeed = ({ theme, onBack }: ImmersiveFeedProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
   const [hasEverSwiped, setHasEverSwiped] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [gender, setGender] = useState<GenderFilter>("both");
+
+  const handleGenderTap = (option: "girl" | "boy") => {
+    setGender((prev) => (prev === option ? "both" : option));
+  };
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
   const touchDeltaY = useRef(0);
