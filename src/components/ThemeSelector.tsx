@@ -29,7 +29,7 @@ const ThemeSelector = ({ onSelectTheme }: ThemeSelectorProps) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-            onClick={() => theme.looks.length > 0 && onSelectTheme(theme)}
+            onClick={() => onSelectTheme(theme)}
             className={`relative overflow-hidden rounded-2xl ${
               index === 0 ? "col-span-2 aspect-[16/9]" : "aspect-[3/4]"
             } group`}
@@ -50,11 +50,6 @@ const ThemeSelector = ({ onSelectTheme }: ThemeSelectorProps) => {
                 {theme.subtitle}
               </p>
             </div>
-            {theme.looks.length === 0 && (
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <span className="text-primary-foreground/60 text-xs font-body">Coming Soon</span>
-              </div>
-            )}
           </motion.button>
         ))}
       </div>
